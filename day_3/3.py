@@ -29,7 +29,7 @@ enabled = True
 #Initialising the result variable
 result_2 = 0
 
-#Regex for finding either correct mul formulas or don't() or do() instructions (note: I regex capturing groups for the numbers)
+#Regex for finding either correct mul formulas or don't() or do() instructions (note: I use regex capturing groups for the numbers)
 regex_2 = r"mul\((\d{1,3}),(\d{1,3})\)|don't\(\)|do\(\)"
 
 #Iterating through matches that satisfy the regex
