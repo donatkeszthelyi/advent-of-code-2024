@@ -10,11 +10,11 @@ with open("4_data.txt", 'r') as file:
 df = pd.DataFrame([list(line) for line in lines])
 
 #Initializing counters for occurrences in different orientations
-total_xmas_horizontal_lr = 0  #Left-to-right
-total_xmas_horizontal_rl = 0  #Right-to-left
-total_xmas_vertical_tb = 0    #Top-to-bottom
-total_xmas_vertical_bt = 0    #Bottom-to-top
-total_xmas_diagonal = 0       #Diagonal
+total_xmas_horizontal_lr = 0 #Left-to-right
+total_xmas_horizontal_rl = 0 #Right-to-left
+total_xmas_vertical_tb = 0 #Top-to-bottom
+total_xmas_vertical_bt = 0 #Bottom-to-top
+total_xmas_diagonal = 0 #Diagonal
 
 #Counting horizontally
 for row in df.itertuples(index=False):
@@ -77,7 +77,7 @@ total_2 = 0
 
 for i in range(df.shape[0]-2): #For every row (except the last 2) in the database
   for v in range(df.iloc[i].shape[0]-2): #For every value (except the last 2) in the row
-    #Incrementing the count if one of the 4 conditions apply (one for every X-MAS layout)
+    #Incrementing the count if one of the 4 conditions applies (one for every X-MAS layout)
     if df.iloc[i][v] == 'M' and df.iloc[i][v+2] == 'M': #First possible layout
         if df.iloc[i+1][v+1] == 'A':
           if df.iloc[i+2][v] == 'S' and df.iloc[i+2][v+2] == 'S':
