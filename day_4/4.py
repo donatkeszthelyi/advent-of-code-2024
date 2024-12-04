@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 #TASK 1
@@ -9,50 +10,41 @@ with open("4_data.txt", 'r') as file:
         lines.append(line.strip())
 df = pd.DataFrame([list(line) for line in lines])
 
-#Initializing counters for occurrences in different orientations
-total_xmas_horizontal_lr = 0 #Left-to-right
-total_xmas_horizontal_rl = 0 #Right-to-left
-total_xmas_vertical_tb = 0 #Top-to-bottom
-total_xmas_vertical_bt = 0 #Bottom-to-top
-total_xmas_diagonal = 0 #Diagonal
+#Initializing counters
+xmas_horizontal = 0
+xmas_vertical = 0
+xmas_diagonal = 0
 
 #Counting horizontally
 for row in df.itertuples(index=False):
     row_values = list(row)
-    #Left-to-right
     for i in range(len(row_values) - 3):
-        if row_values[i:i+4] == ['X', 'M', 'A', 'S']:
-            total_xmas_horizontal_lr += 1
-    #Right-to-left
-    for i in range(len(row_values) - 3):
-        if row_values[i:i+4] == ['S', 'A', 'M', 'X']:
-            total_xmas_horizontal_rl += 1
+        if row_values[i:i+4] == ['X', 'M', 'A', 'S'] or row_values[i:i+4] == ['S', 'A', 'M', 'X']:
+            xmas_horizontal += 1
 
 #Counting vertically
 df_transposed = df.T
 for col in df_transposed.itertuples(index=False):
     col_values = list(col)
-    #Top-to-bottom
     for i in range(len(col_values) - 3):
-        if col_values[i:i+4] == ['X', 'M', 'A', 'S']:
-            total_xmas_vertical_tb += 1
-    #Bottom-to-top
-    for i in range(len(col_values) - 3):
-        if col_values[i:i+4] == ['S', 'A', 'M', 'X']:
-            total_xmas_vertical_bt += 1
+        if col_values[i:i+4] == ['X', 'M', 'A', 'S'] or col_values[i:i+4] == ['S', 'A', 'M', 'X']:
+            xmas_vertical += 1
 
 #Function to extract diagonals
 def get_all_diagonals(matrix):
     diagonals = []
-    rows, cols = len(matrix), len(matrix[0])
+    np_matrix = np.array(matrix)
+    rows, cols = np_matrix.shape
     #Top-left to bottom-right diagonals
     for d in range(-(rows - 1), cols):
-        diagonal_tl_br = [matrix[i][i - d] for i in range(max(0, d), min(rows, cols + d))]
-        diagonals.append(diagonal_tl_br)
+        diagonal_tl_br = np_matrix.diagonal(offset=d)
+        diagonals.append(list(diagonal_tl_br))
     #Top-right to bottom-left diagonals
+    flipped_matrix = np.fliplr(np_matrix)  #Flip the matrix horizontally
     for d in range(-(rows - 1), cols):
-        diagonal_tr_bl = [matrix[i][cols - 1 - (i - d)] for i in range(max(0, d), min(rows, cols + d))]
-        diagonals.append(diagonal_tr_bl)
+        diagonal_tr_bl = flipped_matrix.diagonal(offset=d)
+        diagonals.append(list(diagonal_tr_bl))
+
     return diagonals
 
 #Converting dataframe to a list of lists
@@ -65,9 +57,9 @@ diagonals = get_all_diagonals(matrix)
 for diagonal in diagonals:
     for i in range(len(diagonal) - 3):
         if diagonal[i:i+4] == ['X', 'M', 'A', 'S'] or diagonal[i:i+4] == ['S', 'A', 'M', 'X']:
-            total_xmas_diagonal += 1
+            xmas_diagonal += 1
 
-total_1 = total_xmas_horizontal_lr + total_xmas_horizontal_rl + total_xmas_vertical_tb + total_xmas_vertical_bt + total_xmas_diagonal
+total_1 = xmas_horizontal + xmas_vertical + xmas_diagonal
 
 print(f"Total XMAS-s = {total_1}")
 
